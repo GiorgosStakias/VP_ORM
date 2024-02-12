@@ -5,11 +5,12 @@
 
     <property name="src" location="src"/>
     <property name="build" location="build"/>
-    <property name="openapi" location="C:\Program Files\Visual Paradigm 17.0\lib\openapi.jar"/>
+    <property name="openapi" location="C:\Program Files\Visual Paradigm 17.1\lib\openapi.jar"/>
     <property name="vp" location="c:/users/george/appdata/roaming/visualparadigm/plugins"/>
+    <property name="gson" location="D:\Giorgos_Stakias\SHMMY\0_Diploma\gson-2.8.7.jar"/>
 
     <target name="build">
-        <javac srcdir="${src}" destdir="${build}" classpath="${openapi}" includeAntRuntime="no"/>
+        <javac srcdir="${src}" destdir="${build}" classpath="${openapi};{gson}" includeAntRuntime="yes"/>
         <copy todir="${vp}/${ant.project.name}">
             <fileset dir="${build}"/>
         </copy>
