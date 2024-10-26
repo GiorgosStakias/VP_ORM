@@ -35,6 +35,24 @@ public class Relation implements Serializable {
         ReferenceColumn = referenceColumn;
     }
 
+    public String getOnUpdate() {
+        return OnUpdate;
+    }
+
+    public void setOnUpdate(String onUpdate) {
+        OnUpdate = onUpdate;
+    }
+
+    public String getOnDelete() {
+        return OnDelete;
+    }
+
+    public void setOnDelete(String onDelete) {
+        OnDelete = onDelete;
+    }
+
+    private String OnUpdate;
+    private String OnDelete;
     private RelationType Type;
     private String RelatedEntity;
     private String ReferenceColumn;
