@@ -51,10 +51,16 @@ public class Relation implements Serializable {
         OnDelete = onDelete;
     }
 
+    public Boolean getOwnerSide() { return IsOwnerSide; }
+
+    public void setOwnerSide(Boolean ownerSide) { IsOwnerSide = ownerSide; }
+
+
     private String OnUpdate;
     private String OnDelete;
     private RelationType Type;
     private String RelatedEntity;
     private String ReferenceColumn;
+    private Boolean IsOwnerSide;
 }
 
