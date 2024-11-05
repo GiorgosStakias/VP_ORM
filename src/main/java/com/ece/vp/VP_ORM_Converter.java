@@ -12,6 +12,7 @@ import com.vp.plugin.model.*;
 
 import javax.swing.*;
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class VP_ORM_Converter {
@@ -45,23 +46,35 @@ public class VP_ORM_Converter {
         ///with the necessary for the class generation data
         System.out.println("Active Diagram: " + activeDiagram.getName());
         File Directory = new File(DiagramDirectory+"\\"+activeDiagram.getName());
-        if(Directory.exists()) Directory.delete();
+        if(Directory.exists()) {
+            try {
+                Utils.deleteDirectory(Paths.get(DiagramDirectory+"/"+activeDiagram.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         Directory.mkdir();
 
         List<EntityJsonData> modelEntities = ModelEntityMapper.processDiagramElements(elementIterator);
 
         Utils.fixMissingRelations(modelEntities);
 
+
+
         for (EntityJsonData entity: modelEntities) {
             try {
-                Writer writer = new FileWriter(DiagramDirectory+"\\"+activeDiagram.getName()+"\\"+entity.getName()+".json");
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                gson.toJson(entity, writer);
-                writer.close();
+//                Writer writer = new FileWriter(DiagramDirectory+"\\"+activeDiagram.getName()+"\\"+entity.getName()+".json");
+//                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//                gson.toJson(entity, writer);
+//                writer.close();
 
-                Writer tsClassWriter = new FileWriter(DiagramDirectory+"\\"+activeDiagram.getName()+"\\"+entity.getName()+".ts");
-                tsClassWriter.append(TypescriptClassMapper.mapToTypeScriptClass(entity));
-                tsClassWriter.close();
+                String tsClassFilePath = DiagramDirectory+"/"+activeDiagram.getName()+"/src/entities/"+entity.getName()+".ts";
+                String tsClassContent = TypescriptClassMapper.mapToTypeScriptClass(entity);
+                Utils.writeFile(tsClassFilePath, tsClassContent);
+
+//                Writer tsClassWriter = new FileWriter(DiagramDirectory+"\\"+activeDiagram.getName()+"\\entities\\"+entity.getName()+".ts");
+//                tsClassWriter.append(TypescriptClassMapper.mapToTypeScriptClass(entity));
+//                tsClassWriter.close();
 
             } catch (IOException e) {
                 // Handle any potential IOException that may occur during file operations
@@ -69,6 +82,9 @@ public class VP_ORM_Converter {
             }
         }
 
+        TypescriptClassMapper.generateCRUDForEntities(modelEntities, DiagramDirectory+"/"+activeDiagram.getName());
+        TypescriptClassMapper.generatePostmanCollection(modelEntities, activeDiagram.getName(), DiagramDirectory+"/"+activeDiagram.getName());
+        TypescriptClassMapper.generateExpressAppFiles(modelEntities, DiagramDirectory+"/"+activeDiagram.getName());
     }
 
 }
