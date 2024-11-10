@@ -108,13 +108,13 @@ public class TypescriptClassMapper {
 
     private static void generateEnvFile(String outputPath) throws IOException {
         String content = "# Database configuration\n"
-                + "DB_HOST=localhost\n"
-                + "DB_PORT=3306\n"
-                + "DB_USERNAME=root\n"
-                + "DB_PASSWORD=password\n"
-                + "DB_NAME=meteodata\n\n"
+                + "DB_HOST={{DB HOST}}\n"
+                + "DB_PORT={{DB PORT}}\n"
+                + "DB_USERNAME={{USERNAME}}\n"
+                + "DB_PASSWORD={{PASSWORD}}\n"
+                + "DB_NAME={{SCHEMA NAME}}\n\n"
                 + "# Server configuration\n"
-                + "PORT=8080\n";
+                + "PORT={{EXPRESS SERVER PORT}}\n";
 
         Utils.writeFile(outputPath + "/.env", content);
 
@@ -247,7 +247,7 @@ public class TypescriptClassMapper {
 
         // Add relationship decorators if any exist
         if (attributesHasRelations(attributes)) {
-            tsClass.append("ManyToOne, OneToMany, JoinColumn");
+            tsClass.append("OneToOne, ManyToOne, OneToMany, JoinColumn");
         }
 
         collectRelatedEntities(attributes, relatedEntities);
@@ -411,11 +411,11 @@ public class TypescriptClassMapper {
             List<Map<String, Object>> requests = new ArrayList<>();
 
             // CRUD requests for the entity
-            requests.add(createRequest("Get All " + className, "GET", "/{{baseUrl}}/" + entityName + "s", null));
-            requests.add(createRequest("Get " + className + " by ID", "GET", "/{{baseUrl}}/" + entityName + "s/:id", null));
-            requests.add(createRequest("Create " + className, "POST", "/{{baseUrl}}/" + entityName + "s", createSampleBody(entity)));
-            requests.add(createRequest("Update " + className + " by ID", "PUT", "/{{baseUrl}}/" + entityName + "s/:id", createSampleBody(entity)));
-            requests.add(createRequest("Delete " + className + " by ID", "DELETE", "/{{baseUrl}}/" + entityName + "s/:id", null));
+            requests.add(createRequest("Get All " + className, "GET", "/{{baseUrl}}/"+ entityName +"/" + entityName + "s", null));
+            requests.add(createRequest("Get " + className + " by ID", "GET", "/{{baseUrl}}/"+ entityName +"/" + entityName + "s/:id", null));
+            requests.add(createRequest("Create " + className, "POST", "/{{baseUrl}}/"+ entityName +"/" + entityName + "s", createSampleBody(entity)));
+            requests.add(createRequest("Update " + className + " by ID", "PUT", "/{{baseUrl}}/"+ entityName +"/" + entityName + "s/:id", createSampleBody(entity)));
+            requests.add(createRequest("Delete " + className + " by ID", "DELETE", "/{{baseUrl}}/"+ entityName +"/" + entityName + "s/:id", null));
 
 
             folder.put("item", requests);
@@ -426,9 +426,8 @@ public class TypescriptClassMapper {
 
         try {
 
-            //Writer writer = new FileWriter("D:\\Giorgos_Stakias\\SHMMY\\0_Diploma\\DiagramsJson\\"+diagramName + "_Postman_Collection.json");
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            Utils.writeFile("/" + projectPath+diagramName + "_Postman_Collection.json", gson.toJson(collection));
+            Utils.writeFile(projectPath + "/" + diagramName + "_Postman_Collection.json", gson.toJson(collection));
 
         } catch (IOException e) {
             e.printStackTrace();

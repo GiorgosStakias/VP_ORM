@@ -17,9 +17,7 @@ import java.util.*;
 
 public class VP_ORM_Converter {
 
-    public final String DiagramDirectory = "D:\\Giorgos_Stakias\\SHMMY\\0_Diploma\\DiagramsJson";
-
-    public void convert(){
+    public void convert(String DiagramDirectory){
 
         DiagramManager diagramManager = ApplicationManager.instance().getDiagramManager();
         IDiagramUIModel activeDiagram = diagramManager.getActiveDiagram();
@@ -71,10 +69,6 @@ public class VP_ORM_Converter {
                 String tsClassFilePath = DiagramDirectory+"/"+activeDiagram.getName()+"/src/entities/"+entity.getName()+".ts";
                 String tsClassContent = TypescriptClassMapper.mapToTypeScriptClass(entity);
                 Utils.writeFile(tsClassFilePath, tsClassContent);
-
-//                Writer tsClassWriter = new FileWriter(DiagramDirectory+"\\"+activeDiagram.getName()+"\\entities\\"+entity.getName()+".ts");
-//                tsClassWriter.append(TypescriptClassMapper.mapToTypeScriptClass(entity));
-//                tsClassWriter.close();
 
             } catch (IOException e) {
                 // Handle any potential IOException that may occur during file operations
