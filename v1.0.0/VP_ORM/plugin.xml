@@ -1,0 +1,19 @@
+<plugin
+        id="VP_ORM"
+        description="This is a plugin to generate classes from VP ER diagrams"
+        provider="ShelLuser"
+        class="com.ece.vp.VP_ORM">
+    <actionSets>
+        <actionSet id="VPORMActionSet">
+            <action
+                    id="VPORMConvert"
+                    actionType="generalAction"
+                    label="VP ORM Convert"
+                    tooltip="Generate classes for all entities and relationships of the currently open ER Diagram"
+                    menuPath="Plugins/#"
+                    toolbarPath="Plugins/#">
+                <actionController class="com.ece.vp.VP_ORM_Controller"/>
+            </action>
+        </actionSet>
+    </actionSets>
+</plugin>
