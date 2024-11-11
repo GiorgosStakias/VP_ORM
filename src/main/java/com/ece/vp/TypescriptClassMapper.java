@@ -13,6 +13,53 @@ import java.util.*;
 
 public class TypescriptClassMapper {
 
+    private static final Map<String, String[]> typeMappings = new HashMap<>();
+
+    static {
+        typeMappings.put("BIGINT", new String[]{"string", "bigint"});
+        typeMappings.put("BINARY", new String[]{"Buffer", "binary"});
+        typeMappings.put("BIT", new String[]{"boolean", "bit"});
+        typeMappings.put("BLOB", new String[]{"Buffer", "blob"});
+        typeMappings.put("CHAR", new String[]{"string", "char"});
+        typeMappings.put("CLOB", new String[]{"string", "text"});
+        typeMappings.put("DATE", new String[]{"Date", "date"});
+        typeMappings.put("DATETIME", new String[]{"Date", "datetime"});
+        typeMappings.put("DATETIME2", new String[]{"Date", "datetime2"});
+        typeMappings.put("DECIMAL", new String[]{"string", "decimal"});
+        typeMappings.put("DOUBLE", new String[]{"number", "double"});
+        typeMappings.put("ENUM", new String[]{"string", "enum"});
+        typeMappings.put("FIXED", new String[]{"string", "decimal"});
+        typeMappings.put("FLOAT", new String[]{"number", "float"});
+        typeMappings.put("HSTORE", new String[]{"object", "hstore"});
+        typeMappings.put("IMAGE", new String[]{"Buffer", "longblob"});
+        typeMappings.put("INT", new String[]{"number", "int"});
+        typeMappings.put("INTEGER", new String[]{"number", "int"});
+        typeMappings.put("JSON", new String[]{"object", "json"});
+        typeMappings.put("LONGTEXT", new String[]{"string", "longtext"});
+        typeMappings.put("LONGBLOB", new String[]{"Buffer", "longblob"});
+        typeMappings.put("MEDIUMBLOB", new String[]{"Buffer", "mediumblob"});
+        typeMappings.put("MEDIUMINT", new String[]{"number", "mediumint"});
+        typeMappings.put("NCHAR", new String[]{"string", "nchar"});
+        typeMappings.put("NTEXT", new String[]{"string", "ntext"});
+        typeMappings.put("NUMERIC", new String[]{"string", "numeric"});
+        typeMappings.put("NVARCHAR", new String[]{"string", "nvarchar"});
+        typeMappings.put("REAL", new String[]{"number", "real"});
+        typeMappings.put("SMALLDATETIME", new String[]{"Date", "smalldatetime"});
+        typeMappings.put("SMALLINT", new String[]{"number", "smallint"});
+        typeMappings.put("TEXT", new String[]{"string", "text"});
+        typeMappings.put("TIME", new String[]{"Date", "time"});
+        typeMappings.put("TIMESTAMP", new String[]{"Date", "timestamp"});
+        typeMappings.put("TINYBLOB", new String[]{"Buffer", "tinyblob"});
+        typeMappings.put("TINYINT", new String[]{"number", "tinyint"});
+        typeMappings.put("TINYTEXT", new String[]{"string", "tinytext"});
+        typeMappings.put("UNIQUEIDENTIFIER", new String[]{"string", "uniqueidentifier"});
+        typeMappings.put("UUID", new String[]{"string", "uuid"});
+        typeMappings.put("VARBINARY", new String[]{"Buffer", "varbinary"});
+        typeMappings.put("VARCHAR", new String[]{"string", "varchar"});
+        typeMappings.put("YEAR", new String[]{"number", "year"});
+        typeMappings.put("XML", new String[]{"string", "xml"});
+    }
+
     public static void generateExpressAppFiles(List<EntityJsonData> entities, String outputPath) {
         try {
             generateAppTs(entities, outputPath);
@@ -195,9 +242,14 @@ public class TypescriptClassMapper {
             String routeClassName = className + "Routes";
             String entityName = entity.getName().toLowerCase();
             String primaryKeyName = "";
+            String primaryKeyValue = "id";
+
             Optional<Attribute> primaryKey = entity.getAttributes().stream().filter(eat -> eat.isPrimary()).findFirst();
-            if(primaryKey.isPresent())
+            if(primaryKey.isPresent()) {
                 primaryKeyName = primaryKey.get().getName();
+                String [] pkTypes = getTypeMappings(primaryKey.get().getType());
+                if(pkTypes[0].equals("number")) primaryKeyValue = "parseInt(id)";
+            }
 
             try {
                 // Read and replace placeholders in controller template
@@ -206,7 +258,8 @@ public class TypescriptClassMapper {
                         .replace("{{className}}", className)
                         .replace("{{entityName}}", entity.getName())
                         .replace("{{controllerClassName}}", controllerClassName)
-                        .replace("{{pk}}", primaryKeyName);
+                        .replace("{{pk}}", primaryKeyName)
+                        .replace("{{pkValue}}", primaryKeyValue);
 
                 // Write the controller file
                 String controllerFilePath = projectPath + "/src/controllers/" + controllerClassName + ".ts";
@@ -268,6 +321,7 @@ public class TypescriptClassMapper {
 
             String fieldName = attribute.getName();
             String fieldType = getTypescriptType(attribute.getType());
+            String [] fieldTypes = getTypeMappings(attribute.getType());
             boolean isPrimary = attribute.isPrimary();
             boolean isNullable = attribute.isNullable();
             boolean isUnique = attribute.isUnique();
@@ -276,20 +330,22 @@ public class TypescriptClassMapper {
             // Handle primary key
             if(relations == null || relations.isEmpty()) {
                 if (isPrimary) {
-                    tsClass.append("  @PrimaryColumn()\n");
+                    tsClass.append("  @PrimaryColumn({ type: '"+fieldTypes[1] +"'})\n");
                 } else {
                     tsClass.append("  @Column(");
+                    tsClass.append("{ type: '");
+                    tsClass.append(fieldTypes[1] +"'");
+
                     if (isUnique || isNullable) {
-                        tsClass.append("{ ");
-                        if (isUnique) tsClass.append("unique: true, ");
-                        if (isNullable) tsClass.append("nullable: true ");
-                        tsClass.append("}");
+                        if (isUnique) tsClass.append(", unique: true");
+                        if (isNullable) tsClass.append(", nullable: true ");
                     }
+                    tsClass.append("}");
                     tsClass.append(")\n");
                 }
 
                 // Add the field definition
-                tsClass.append("  ").append(fieldName).append(": ").append(fieldType).append(";\n\n");
+                tsClass.append("  ").append(fieldName).append(": ").append(fieldTypes[0]).append(";\n\n");
             }
             // Handle relationships (e.g., ManyToOne)
             else {
@@ -367,6 +423,10 @@ public class TypescriptClassMapper {
             return "Date";
         }
         return "any"; // Fallback type
+    }
+
+    public static String[] getTypeMappings(String vpType) {
+        return typeMappings.getOrDefault(vpType.toUpperCase(), new String[]{"unknown", "unknown"});
     }
 
     // Helper to convert the entity name to PascalCase (e.g., "data_providers" to "DataProviders")
@@ -534,7 +594,7 @@ public class TypescriptClassMapper {
             "    static async getById(req: Request, res: Response) {\n" +
             "        const { id } = req.params;\n" +
             "        const repository = AppDataSource.getRepository({{className}});\n" +
-            "        const item = await repository.findOneBy({ {{pk}}: parseInt(id) });\n" +
+            "        const item = await repository.findOneBy({ {{pk}}: {{pkValue}} });\n" +
             "\n" +
             "        if (item) {\n" +
             "            res.json(item);\n" +
@@ -558,7 +618,7 @@ public class TypescriptClassMapper {
             "    static async update(req: Request, res: Response) {\n" +
             "        const { id } = req.params;\n" +
             "        const repository = AppDataSource.getRepository({{className}});\n" +
-            "        const item = await repository.findOneBy({ {{pk}}: parseInt(id) });\n" +
+            "        const item = await repository.findOneBy({ {{pk}}: {{pkValue}} });\n" +
             "\n" +
             "        if (item) {\n" +
             "            repository.merge(item, req.body);\n" +
@@ -572,7 +632,7 @@ public class TypescriptClassMapper {
             "    static async delete(req: Request, res: Response) {\n" +
             "        const { id } = req.params;\n" +
             "        const repository = AppDataSource.getRepository({{className}});\n" +
-            "        const result = await repository.delete({ {{pk}}: parseInt(id) });\n" +
+            "        const result = await repository.delete({ {{pk}}: {{pkValue}} });\n" +
             "\n" +
             "        if (result.affected) {\n" +
             "            res.status(204).send();\n" +

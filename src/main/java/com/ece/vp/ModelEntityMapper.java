@@ -80,7 +80,7 @@ public class ModelEntityMapper {
                 attribute.setNullable(col.isNullable());
                 attribute.setPrimary(col.isPrimaryKey());
                 attribute.setUnique(col.isUnique());
-                attribute.setType(child.getModelType() + " | " + col.getTypeInText());
+                attribute.setType(col.getTypeInText());
 
                 List<Relation> modelRelations = handleChildRelations(col);
                 attribute.setRelations(modelRelations);
