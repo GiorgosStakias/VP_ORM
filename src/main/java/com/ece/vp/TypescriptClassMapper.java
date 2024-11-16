@@ -144,6 +144,16 @@ public class TypescriptClassMapper {
                 + "  username: process.env.DB_USERNAME,\n"
                 + "  password: process.env.DB_PASSWORD,\n"
                 + "  database: process.env.DB_NAME,\n"
+                + "  /* USE IN CASE OF MS SQL */"
+                + "  /*options: {\n"
+                +"    \n"
+                +"    encrypt: false, // Enables encryption\n"
+                +"    trustServerCertificate: true, // Allows self-signed certificate\n"
+                +"  },\n"
+                +"  extra: {\n"
+                +"    integratedSecurity: false, // Use for Windows Authentication\n"
+                +"    connectionTimeout: 30000,\n"
+                +"  },*/\n"
                 + "  synchronize: true,\n"
                 + "  logging: true,\n"
                 + "  entities: [" + entityArray.substring(0, entityArray.length() - 2) + "],\n"
@@ -189,8 +199,10 @@ public class TypescriptClassMapper {
                 "    \"@types/express\": \"^4.17.17\",\n" +
                 "    \"dotenv\": \"^16.4.5\",\n" +
                 "    \"express\": \"^4.18.2\",\n" +
+                "    \"mssql\": \"^10.0.4\",\n"+
                 "    \"mysql\": \"^2.18.1\",\n" +
                 "    \"pg\": \"^8.11.1\",\n" +
+                "    \"nodemon\": \"^3.1.7\",\n"+
                 "    \"ts-node\": \"^10.9.1\",\n" +
                 "    \"typeorm\": \"0.3.20\",\n" +
                 "    \"typescript\": \"^5.1.3\"\n" +
