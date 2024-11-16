@@ -16,48 +16,48 @@ public class TypescriptClassMapper {
     private static final Map<String, String[]> typeMappings = new HashMap<>();
 
     static {
-        typeMappings.put("BIGINT", new String[]{"string", "bigint"});
-        typeMappings.put("BINARY", new String[]{"Buffer", "binary"});
-        typeMappings.put("BIT", new String[]{"boolean", "bit"});
-        typeMappings.put("BLOB", new String[]{"Buffer", "blob"});
-        typeMappings.put("CHAR", new String[]{"string", "char"});
-        typeMappings.put("CLOB", new String[]{"string", "text"});
-        typeMappings.put("DATE", new String[]{"Date", "date"});
-        typeMappings.put("DATETIME", new String[]{"Date", "datetime"});
-        typeMappings.put("DATETIME2", new String[]{"Date", "datetime2"});
-        typeMappings.put("DECIMAL", new String[]{"string", "decimal"});
-        typeMappings.put("DOUBLE", new String[]{"number", "double"});
-        typeMappings.put("ENUM", new String[]{"string", "enum"});
-        typeMappings.put("FIXED", new String[]{"string", "decimal"});
-        typeMappings.put("FLOAT", new String[]{"number", "float"});
-        typeMappings.put("HSTORE", new String[]{"object", "hstore"});
-        typeMappings.put("IMAGE", new String[]{"Buffer", "longblob"});
-        typeMappings.put("INT", new String[]{"number", "int"});
-        typeMappings.put("INTEGER", new String[]{"number", "int"});
-        typeMappings.put("JSON", new String[]{"object", "json"});
-        typeMappings.put("LONGTEXT", new String[]{"string", "longtext"});
-        typeMappings.put("LONGBLOB", new String[]{"Buffer", "longblob"});
-        typeMappings.put("MEDIUMBLOB", new String[]{"Buffer", "mediumblob"});
-        typeMappings.put("MEDIUMINT", new String[]{"number", "mediumint"});
-        typeMappings.put("NCHAR", new String[]{"string", "nchar"});
-        typeMappings.put("NTEXT", new String[]{"string", "ntext"});
-        typeMappings.put("NUMERIC", new String[]{"string", "numeric"});
-        typeMappings.put("NVARCHAR", new String[]{"string", "nvarchar"});
-        typeMappings.put("REAL", new String[]{"number", "real"});
-        typeMappings.put("SMALLDATETIME", new String[]{"Date", "smalldatetime"});
-        typeMappings.put("SMALLINT", new String[]{"number", "smallint"});
-        typeMappings.put("TEXT", new String[]{"string", "text"});
-        typeMappings.put("TIME", new String[]{"Date", "time"});
-        typeMappings.put("TIMESTAMP", new String[]{"Date", "timestamp"});
-        typeMappings.put("TINYBLOB", new String[]{"Buffer", "tinyblob"});
-        typeMappings.put("TINYINT", new String[]{"number", "tinyint"});
-        typeMappings.put("TINYTEXT", new String[]{"string", "tinytext"});
-        typeMappings.put("UNIQUEIDENTIFIER", new String[]{"string", "uniqueidentifier"});
-        typeMappings.put("UUID", new String[]{"string", "uuid"});
-        typeMappings.put("VARBINARY", new String[]{"Buffer", "varbinary"});
-        typeMappings.put("VARCHAR", new String[]{"string", "varchar"});
-        typeMappings.put("YEAR", new String[]{"number", "year"});
-        typeMappings.put("XML", new String[]{"string", "xml"});
+        typeMappings.put("BIGINT", new String[]{"string", "bigint", "123456789012345"});
+        typeMappings.put("BINARY", new String[]{"Buffer", "binary", "AQIDBA=="}); // Base64 encoded example
+        typeMappings.put("BIT", new String[]{"boolean", "bit", "true"});
+        typeMappings.put("BLOB", new String[]{"Buffer", "blob", "AQIDBA=="});
+        typeMappings.put("CHAR", new String[]{"string", "char", "A"});
+        typeMappings.put("CLOB", new String[]{"string", "text", "Sample Text"});
+        typeMappings.put("DATE", new String[]{"Date", "date", "2024-01-01"});
+        typeMappings.put("DATETIME", new String[]{"Date", "datetime", "2024-01-01T10:00:00Z"});
+        typeMappings.put("DATETIME2", new String[]{"Date", "datetime2", "2024-01-01T10:00:00.000Z"});
+        typeMappings.put("DECIMAL", new String[]{"string", "decimal", "12345.67"});
+        typeMappings.put("DOUBLE", new String[]{"number", "double", "12345.67"});
+        typeMappings.put("ENUM", new String[]{"string", "enum", "ENUM_VALUE"});
+        typeMappings.put("FIXED", new String[]{"string", "decimal", "12345.67"});
+        typeMappings.put("FLOAT", new String[]{"number", "float", "12345.67"});
+        typeMappings.put("HSTORE", new String[]{"object", "hstore", "{key: value}"});
+        typeMappings.put("IMAGE", new String[]{"Buffer", "longblob", "/9j/4AAQSkZJRgABAQEAYABgAAD/"});
+        typeMappings.put("INT", new String[]{"number", "int", "123"});
+        typeMappings.put("INTEGER", new String[]{"number", "int", "123"});
+        typeMappings.put("JSON", new String[]{"object", "json", "{key: value}"});
+        typeMappings.put("LONGTEXT", new String[]{"string", "longtext", "This is a long text sample."});
+        typeMappings.put("LONGBLOB", new String[]{"Buffer", "longblob", "/9j/4AAQSkZJRgABAQEAYABgAAD/"});
+        typeMappings.put("MEDIUMBLOB", new String[]{"Buffer", "mediumblob", "/9j/4AAQSkZJRgABAQEAYABgAAD/"});
+        typeMappings.put("MEDIUMINT", new String[]{"number", "mediumint", "12345"});
+        typeMappings.put("NCHAR", new String[]{"string", "nchar", "Sample"});
+        typeMappings.put("NTEXT", new String[]{"string", "ntext", "Sample Text"});
+        typeMappings.put("NUMERIC", new String[]{"string", "numeric", "12345.67"});
+        typeMappings.put("NVARCHAR", new String[]{"string", "nvarchar", "Sample"});
+        typeMappings.put("REAL", new String[]{"number", "real", "12345.67"});
+        typeMappings.put("SMALLDATETIME", new String[]{"Date", "smalldatetime", "2024-01-01T10:00:00"});
+        typeMappings.put("SMALLINT", new String[]{"number", "smallint", "123"});
+        typeMappings.put("TEXT", new String[]{"string", "text", "Sample Text"});
+        typeMappings.put("TIME", new String[]{"Date", "time", "10:00:00"});
+        typeMappings.put("TIMESTAMP", new String[]{"Date", "timestamp", "2024-01-01T10:00:00Z"});
+        typeMappings.put("TINYBLOB", new String[]{"Buffer", "tinyblob", "AQID"});
+        typeMappings.put("TINYINT", new String[]{"number", "tinyint", "1"});
+        typeMappings.put("TINYTEXT", new String[]{"string", "tinytext", "Sample"});
+        typeMappings.put("UNIQUEIDENTIFIER", new String[]{"string", "uniqueidentifier", "550e8400-e29b-41d4-a716-446655440000"});
+        typeMappings.put("UUID", new String[]{"string", "uuid", "550e8400-e29b-41d4-a716-446655440000"});
+        typeMappings.put("VARBINARY", new String[]{"Buffer", "varbinary", "AQIDBA=="});
+        typeMappings.put("VARCHAR", new String[]{"string", "varchar", "Sample"});
+        typeMappings.put("YEAR", new String[]{"number", "year", "2024"});
+        typeMappings.put("XML", new String[]{"string", "xml", "<root><child>value</child></root>"});
     }
 
     public static void generateExpressAppFiles(List<EntityJsonData> entities, String outputPath) {
@@ -320,7 +320,6 @@ public class TypescriptClassMapper {
         for (Attribute attribute : attributes) {
 
             String fieldName = attribute.getName();
-            String fieldType = getTypescriptType(attribute.getType());
             String [] fieldTypes = getTypeMappings(attribute.getType());
             boolean isPrimary = attribute.isPrimary();
             boolean isNullable = attribute.isNullable();
@@ -411,22 +410,8 @@ public class TypescriptClassMapper {
         }
     }
 
-    // Helper to convert the provided type (e.g., "DBColumn | varchar") into TypeScript types
-    private static String getTypescriptType(String dbType) {
-        if (dbType.contains("bigint") || dbType.contains("int")
-                || dbType.contains("float") || dbType.contains("double")
-                || dbType.contains("bit")) {
-            return "number";
-        } else if (dbType.contains("varchar")) {
-            return "string";
-        } else if (dbType.contains("timestamp") || dbType.contains("datetime")) {
-            return "Date";
-        }
-        return "any"; // Fallback type
-    }
-
     public static String[] getTypeMappings(String vpType) {
-        return typeMappings.getOrDefault(vpType.toUpperCase(), new String[]{"unknown", "unknown"});
+        return typeMappings.getOrDefault(vpType.toUpperCase(), new String[]{"unknown", "unknown", ""});
     }
 
     // Helper to convert the entity name to PascalCase (e.g., "data_providers" to "DataProviders")
@@ -532,22 +517,9 @@ public class TypescriptClassMapper {
 
         for (Attribute attribute : entity.getAttributes()) {
             String attributeName = attribute.getName();
-            String attributeType = attribute.getType().toLowerCase();
+            String attributeType = attribute.getType().toUpperCase();
 
-            // Generate sample values based on attribute type
-            if (attributeType.contains("string")||attributeType.contains("varchar")) {
-                sampleData.put(attributeName, "sample value");
-            } else if (attributeType.contains("bigint") || attributeType.contains("int")
-                    || attributeType.contains("float") || attributeType.contains("double")
-                    || attributeType.contains("bit") || attributeType.contains("number")) {
-                sampleData.put(attributeName, 123);
-            } else if (attributeType.contains("date")||attributeType.contains("timestamp") || attributeType.contains("datetime")) {
-                sampleData.put(attributeName, "0001-01-01T00:00:00Z");
-            } else if (attributeType.contains("boolean")) {
-                sampleData.put(attributeName, true);
-            } else {
-                sampleData.put(attributeName, null); // Default to null for unsupported types
-            }
+            sampleData.put(attributeName, getTypeMappings(attributeType)[2]);
         }
 
         try {
