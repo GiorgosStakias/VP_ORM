@@ -19,6 +19,7 @@ public class TypescriptClassMapper {
         typeMappings.put("BIGINT", new String[]{"string", "bigint", "123456789012345"});
         typeMappings.put("BINARY", new String[]{"Buffer", "binary", "AQIDBA=="}); // Base64 encoded example
         typeMappings.put("BIT", new String[]{"boolean", "bit", "true"});
+        typeMappings.put("BOOLEAN", new String[]{"boolean", "boolean", "true"});
         typeMappings.put("BLOB", new String[]{"Buffer", "blob", "AQIDBA=="});
         typeMappings.put("CHAR", new String[]{"string", "char", "A"});
         typeMappings.put("CLOB", new String[]{"string", "text", "Sample Text"});
@@ -63,6 +64,7 @@ public class TypescriptClassMapper {
     public static void generateExpressAppFiles(List<EntityJsonData> entities, String outputPath) {
         try {
             generateAppTs(entities, outputPath);
+            generateTypeMapper(outputPath);
             generateIndexTs(outputPath);
             generateOrmConfigTs(entities, outputPath);
             generateEnvFile(outputPath);
@@ -122,6 +124,247 @@ public class TypescriptClassMapper {
         Utils.writeFile(outputPath + "/src/index.ts", content);
     }
 
+    private static void generateTypeMapper(String outputPath) throws IOException{
+        String content = "import * as dotenv from 'dotenv';\n" +
+                "\n" +
+                "dotenv.config();\n" +
+                "\n" +
+                "type DBMSMapping = {\n" +
+                "  [dbms: string]: string;\n" +
+                "};\n" +
+                "\n" +
+                "const typeMappings: { [key: string]: DBMSMapping } = {\n" +
+                "  bigint: {\n" +
+                "    mssql: 'bigint',\n" +
+                "    mysql: 'bigint',\n" +
+                "    postgres: 'bigint',\n" +
+                "    default: 'bigint',\n" +
+                "  },\n" +
+                "  binary: {\n" +
+                "    mssql: 'binary',\n" +
+                "    mysql: 'binary',\n" +
+                "    postgres: 'bytea',\n" +
+                "    default: 'binary',\n" +
+                "  },\n" +
+                "  boolean: {\n" +
+                "    mssql: 'bit',\n" +
+                "    mysql: 'boolean',\n" +
+                "    postgres: 'boolean',\n" +
+                "    default: 'binary',\n" +
+                "  },\n" +
+                "  bit: {\n" +
+                "    mssql: 'bit',\n" +
+                "    mysql: 'bit',\n" +
+                "    postgres: 'boolean',\n" +
+                "    default: 'boolean',\n" +
+                "  },\n" +
+                "  blob: {\n" +
+                "    mssql: 'varbinary',\n" +
+                "    mysql: 'blob',\n" +
+                "    postgres: 'bytea',\n" +
+                "    default: 'blob',\n" +
+                "  },\n" +
+                "  char: {\n" +
+                "    mssql: 'char',\n" +
+                "    mysql: 'char',\n" +
+                "    postgres: 'char',\n" +
+                "    default: 'char',\n" +
+                "  },\n" +
+                "  text: {\n" +
+                "    mssql: 'varchar',\n" +
+                "    mysql: 'text',\n" +
+                "    postgres: 'text',\n" +
+                "    default: 'text',\n" +
+                "  },\n" +
+                "  date: {\n" +
+                "    mssql: 'date',\n" +
+                "    mysql: 'date',\n" +
+                "    postgres: 'date',\n" +
+                "    default: 'date',\n" +
+                "  },\n" +
+                "  datetime: {\n" +
+                "    mssql: 'datetime',\n" +
+                "    mysql: 'datetime',\n" +
+                "    postgres: 'timestamp without time zone',\n" +
+                "    default: 'timestamp',\n" +
+                "  },\n" +
+                "  datetime2: {\n" +
+                "    mssql: 'datetime2',\n" +
+                "    mysql: 'datetime',\n" +
+                "    postgres: 'timestamp without time zone',\n" +
+                "    default: 'datetime',\n" +
+                "  },\n" +
+                "  decimal: {\n" +
+                "    mssql: 'decimal',\n" +
+                "    mysql: 'decimal',\n" +
+                "    postgres: 'numeric',\n" +
+                "    default: 'decimal',\n" +
+                "  },\n" +
+                "  double: {\n" +
+                "    mssql: 'float',\n" +
+                "    mysql: 'double',\n" +
+                "    postgres: 'double precision',\n" +
+                "    default: 'float',\n" +
+                "  },\n" +
+                "  enum: {\n" +
+                "    mssql: 'varchar',\n" +
+                "    mysql: 'enum',\n" +
+                "    postgres: 'enum',\n" +
+                "    default: 'varchar',\n" +
+                "  },\n" +
+                "  float: {\n" +
+                "    mssql: 'float',\n" +
+                "    mysql: 'float',\n" +
+                "    postgres: 'real',\n" +
+                "    default: 'float',\n" +
+                "  },\n" +
+                "  hstore: {\n" +
+                "    mssql: 'nvarchar',\n" +
+                "    mysql: 'text',\n" +
+                "    postgres: 'hstore',\n" +
+                "    default: 'json',\n" +
+                "  },\n" +
+                "  int: {\n" +
+                "    mssql: 'int',\n" +
+                "    mysql: 'int',\n" +
+                "    postgres: 'integer',\n" +
+                "    default: 'int',\n" +
+                "  },\n" +
+                "  json: {\n" +
+                "    mssql: 'nvarchar',\n" +
+                "    mysql: 'json',\n" +
+                "    postgres: 'json',\n" +
+                "    default: 'text',\n" +
+                "  },\n" +
+                "  longblob: {\n" +
+                "    mssql: 'varbinary',\n" +
+                "    mysql: 'longblob',\n" +
+                "    postgres: 'bytea',\n" +
+                "    default: 'blob',\n" +
+                "  },\n" +
+                "  mediumblob: {\n" +
+                "    mssql: 'varbinary',\n" +
+                "    mysql: 'mediumblob',\n" +
+                "    postgres: 'bytea',\n" +
+                "    default: 'blob',\n" +
+                "  },\n" +
+                "  mediumint: {\n" +
+                "    mssql: 'int',\n" +
+                "    mysql: 'mediumint',\n" +
+                "    postgres: 'integer',\n" +
+                "    default: 'int',\n" +
+                "  },\n" +
+                "  numeric: {\n" +
+                "    mssql: 'decimal',\n" +
+                "    mysql: 'numeric',\n" +
+                "    postgres: 'numeric',\n" +
+                "    default: 'decimal',\n" +
+                "  },\n" +
+                "  real: {\n" +
+                "    mssql: 'real',\n" +
+                "    mysql: 'float',\n" +
+                "    postgres: 'real',\n" +
+                "    default: 'float',\n" +
+                "  },\n" +
+                "  smalldatetime: {\n" +
+                "    mssql: 'smalldatetime',\n" +
+                "    mysql: 'datetime',\n" +
+                "    postgres: 'timestamp without time zone',\n" +
+                "    default: 'datetime',\n" +
+                "  },\n" +
+                "  smallint: {\n" +
+                "    mssql: 'smallint',\n" +
+                "    mysql: 'smallint',\n" +
+                "    postgres: 'smallint',\n" +
+                "    default: 'smallint',\n" +
+                "  },\n" +
+                "  timestamp: {\n" +
+                "    mssql: 'datetime2',\n" +
+                "    mysql: 'timestamp',\n" +
+                "    postgres: 'timestamp',\n" +
+                "    default: 'timestamp',\n" +
+                "  },\n" +
+                "  tinyint: {\n" +
+                "    mssql: 'tinyint',\n" +
+                "    mysql: 'tinyint',\n" +
+                "    postgres: 'smallint',\n" +
+                "    default: 'tinyint',\n" +
+                "  },\n" +
+                "  uuid: {\n" +
+                "    mssql: 'uniqueidentifier',\n" +
+                "    mysql: 'char',\n" +
+                "    postgres: 'uuid',\n" +
+                "    default: 'uuid',\n" +
+                "  },\n" +
+                "  varchar: {\n" +
+                "    mssql: 'varchar',\n" +
+                "    mysql: 'varchar',\n" +
+                "    postgres: 'varchar',\n" +
+                "    default: 'varchar',\n" +
+                "  },\n" +
+                "  nvarchar: {\n" +
+                "    mssql: 'nvarchar',\n" +
+                "    mysql: 'varchar',\n" +
+                "    postgres: 'varchar',\n" +
+                "    default: 'varchar',\n" +
+                "  },\n" +
+                "  time: {\n" +
+                "    mssql: 'time',\n" +
+                "    mysql: 'time',\n" +
+                "    postgres: 'time without time zone',\n" +
+                "    default: 'time',\n" +
+                "  },\n" +
+                "  tinyblob: {\n" +
+                "    mssql: 'varbinary',\n" +
+                "    mysql: 'tinyblob',\n" +
+                "    postgres: 'bytea',\n" +
+                "    default: 'blob',\n" +
+                "  },\n" +
+                "  tinytext: {\n" +
+                "    mssql: 'varchar',\n" +
+                "    mysql: 'tinytext',\n" +
+                "    postgres: 'text',\n" +
+                "    default: 'text',\n" +
+                "  },\n" +
+                "  uniqueidentifier: {\n" +
+                "    mssql: 'uniqueidentifier',\n" +
+                "    mysql: 'char',\n" +
+                "    postgres: 'uuid',\n" +
+                "    default: 'uuid',\n" +
+                "  },\n" +
+                "  varbinary: {\n" +
+                "    mssql: 'varbinary',\n" +
+                "    mysql: 'varbinary',\n" +
+                "    postgres: 'bytea',\n" +
+                "    default: 'binary',\n" +
+                "  },\n" +
+                "  year: {\n" +
+                "    mssql: 'smallint',\n" +
+                "    mysql: 'year',\n" +
+                "    postgres: 'smallint',\n" +
+                "    default: 'smallint',\n" +
+                "  },\n" +
+                "  xml: {\n" +
+                "    mssql: 'xml',\n" +
+                "    mysql: 'text',\n" +
+                "    postgres: 'xml',\n" +
+                "    default: 'text',\n" +
+                "  }\n" +
+                "};\n" +
+                "\n" +
+                "export function getDatabaseType(typeormType: string): string {\n" +
+                "  const dbType = process.env.DB_TYPE || 'default';\n" +
+                "  const mapping = typeMappings[typeormType.toLowerCase()];\n" +
+                "\n" +
+                "  if (!mapping) {\n" +
+                "    throw new Error(`Type \"${typeormType}\" is not recognized.`);\n" +
+                "  }\n" +
+                "\n" +
+                "  return mapping[dbType] || mapping.default;\n" +
+                "}";
+        Utils.writeFile(outputPath + "/src/typeMapper.ts", content);
+    }
+
     private static void generateOrmConfigTs(List<EntityJsonData> entities, String outputPath) throws IOException {
         StringBuilder entityImports = new StringBuilder();
         StringBuilder entityArray = new StringBuilder();
@@ -165,6 +408,7 @@ public class TypescriptClassMapper {
 
     private static void generateEnvFile(String outputPath) throws IOException {
         String content = "# Database configuration\n"
+                + "DB_TYPE={{DB TYPE}}\n"
                 + "DB_HOST={{DB HOST}}\n"
                 + "DB_PORT={{DB PORT}}\n"
                 + "DB_USERNAME={{USERNAME}}\n"
@@ -318,6 +562,7 @@ public class TypescriptClassMapper {
         collectRelatedEntities(attributes, relatedEntities);
 
         tsClass.append(" } from 'typeorm';\n\n");
+        tsClass.append("import { getDatabaseType } from '../typeMapper';\n");
 
         for (String relatedEntity : relatedEntities) {
             tsClass.append("import { ").append(toPascalCase(relatedEntity)).append(" } from './").append(relatedEntity).append("';\n");
@@ -341,11 +586,11 @@ public class TypescriptClassMapper {
             // Handle primary key
             if(relations == null || relations.isEmpty()) {
                 if (isPrimary) {
-                    tsClass.append("  @PrimaryColumn({ type: '"+fieldTypes[1] +"'})\n");
+                    tsClass.append("  @PrimaryColumn({ type: getDatabaseType('"+fieldTypes[1] +"') as any })\n");
                 } else {
                     tsClass.append("  @Column(");
-                    tsClass.append("{ type: '");
-                    tsClass.append(fieldTypes[1] +"'");
+                    tsClass.append("{ type: getDatabaseType('");
+                    tsClass.append(fieldTypes[1] +"') as any");
 
                     if (isUnique || isNullable) {
                         if (isUnique) tsClass.append(", unique: true");
@@ -528,10 +773,14 @@ public class TypescriptClassMapper {
         Map<String, Object> sampleData = new HashMap<>();
 
         for (Attribute attribute : entity.getAttributes()) {
+
+            if(attribute.getType().equals("DBColumn | foreign"))
+                continue;
+
             String attributeName = attribute.getName();
             String attributeType = attribute.getType().toUpperCase();
 
-            sampleData.put(attributeName, getTypeMappings(attributeType)[2]);
+            sampleData.put(attributeName, attributeType.equals("BOOLEAN") || attributeType.equals("BIT") ? true : getTypeMappings(attributeType)[2]);
         }
 
         try {

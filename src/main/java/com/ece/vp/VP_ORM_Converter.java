@@ -11,31 +11,15 @@ import com.vp.plugin.model.*;
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 
 public class VP_ORM_Converter {
 
-    public void convert(String DiagramDirectory){
-
-        DiagramManager diagramManager = ApplicationManager.instance().getDiagramManager();
-        IDiagramUIModel activeDiagram = diagramManager.getActiveDiagram();
-        
-        if (activeDiagram.getType() != "ERDiagram"){
-
-            ViewManager viewManager = ApplicationManager.instance().getViewManager();
-
-            JFrame parentFrame = (JFrame) viewManager.getRootFrame();
-            viewManager.showMessageDialog(
-                    parentFrame,
-                    "The currently open diagram is not an ER diagram!",
-                    "Bad Diagram Type",
-                    2
-            );
-
-            return;
-        }
+    public String convert(String DiagramDirectory, IDiagramUIModel activeDiagram) {
 
         //get an iterator on the elements of the active diagram
         Iterator elementIterator = activeDiagram.diagramElementIterator();
@@ -57,8 +41,6 @@ public class VP_ORM_Converter {
 
         Utils.fixMissingRelations(modelEntities);
 
-
-
         for (EntityJsonData entity: modelEntities) {
             try {
 //                Writer writer = new FileWriter(DiagramDirectory+"\\"+activeDiagram.getName()+"\\"+entity.getName()+".json");
@@ -79,6 +61,8 @@ public class VP_ORM_Converter {
         TypescriptClassMapper.generateCRUDForEntities(modelEntities, DiagramDirectory+"/"+activeDiagram.getName());
         TypescriptClassMapper.generatePostmanCollection(modelEntities, activeDiagram.getName(), DiagramDirectory+"/"+activeDiagram.getName());
         TypescriptClassMapper.generateExpressAppFiles(modelEntities, DiagramDirectory+"/"+activeDiagram.getName());
+
+        return DiagramDirectory + "\\" + activeDiagram.getName();
     }
 
 }
