@@ -21,10 +21,15 @@ This plugin for Visual Paradigm automates the creation of a TypeScript back-end 
 
 ## Installation
 1. Clone this repository or download the plugin file.
-2. Add the plugin to Visual Paradigm:
-   - Navigate to **Tools > Application Options > Plugins**.
-   - Click **Add** and select the plugin directory or file.
-3. Restart Visual Paradigm.
+2. Open Visual Paradigm
+3. Navigate to the **Help** tab in the top menu and select **Install Plugin**.
+4. In the **Install Plugin** dialog box, choose one of the following options:
+   - **Install from a zip of plugin**: Select this if you have the plugin packaged as a `.zip` file.
+   - **Install from a folder of plugins**: Use this if you have the plugin extracted into a folder.
+   - **Manually copy the plugin folder(s) to the following directory**: Copy the plugin files to the directory shown in the dialog box (e.g., `C:\Users\<YourUser>\AppData\Roaming\VisualParadigm\plugins`).
+
+5. After selecting the appropriate option, click **Next** and follow the on-screen instructions.
+6. Once the installation is complete, restart Visual Paradigm to activate the plugin.
 
 ## Usage
 1. Open Visual Paradigm and load your ER diagram.
