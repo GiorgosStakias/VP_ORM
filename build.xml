@@ -5,9 +5,9 @@
 
     <property name="src" location="src"/>
     <property name="build" location="build"/>
-    <property name="openapi" location="C:\Program Files\Visual Paradigm 17.1\lib\openapi.jar"/>
-    <property name="vp" location="c:/users/george/appdata/roaming/visualparadigm/plugins"/>
-    <property name="gson" location="D:\Giorgos_Stakias\SHMMY\0_Diploma\gson-2.8.7.jar"/>
+    <property name="openapi" location="path\to\Visual Paradigm 17.1\lib\openapi.jar"/>
+    <property name="vp" location="path\to\visualparadigm/plugins"/>
+    <property name="gson" location="path\to\gson-2.8.7.jar"/>
 
     <target name="build">
         <javac srcdir="${src}" destdir="${build}" classpath="${openapi};{gson}" includeAntRuntime="yes"/>
